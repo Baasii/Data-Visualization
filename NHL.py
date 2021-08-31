@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px  
 import plotly.graph_objects as go
 
+
 import dash  
 import dash_core_components as dcc
 import dash_html_components as html
@@ -16,6 +17,30 @@ from dash.dependencies import Input, Output
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 
+#dfcities = pd.read_csv("Cities.csv", sep=";", usecols=[2,19])   # Lähteenä https://github.com/drei01/geojson-world-cities
+dfplayercities = pd.read_csv("PlayerCities.csv", sep=",", usecols=[9])
+
+dfplayercities = dfplayercities.groupby(['Nationality']).size().reset_index(name='count')
+print(dfplayercities)
+
+#def dataframe_difference(df1, df2, which):
+   # """Find rows which are different between two DataFrames."""
+ #   comparison_df = df1.merge(
+  #      df2,
+   #     indicator=True,
+    #    how='outer'
+    #)
+    #if which is None:
+     #   diff_df = comparison_df[comparison_df['_merge'] != 'both']
+    #else:
+    #    diff_df = comparison_df[comparison_df['_merge'] == which]
+    #diff_df[['lat','lon']] = diff_df['Coordinates'].str.split(',',expand=True)
+    #diff_df.to_csv('diff.csv')
+    #print(diff_df)
+    #return diff_df
+
+#dataframe_difference(dfcities, dfplayercities, which='both')
+
 
 
 SIDEBAR_STYLE = {
@@ -28,10 +53,10 @@ SIDEBAR_STYLE = {
     "background-color": "#f8f9fa",
 }
 
-# padding for the page content
+
 CONTENT_STYLE = {
-    "margin-left": "15%",
-    "margin-right": "15%",
+    "margin-left": "10%",
+    "margin-right": "10%",
     "padding": "2rem 1rem",
 }
 
@@ -84,6 +109,7 @@ def render_page_content(pathname):
     dfGoals = pd.read_csv("Goals.csv", nrows=50, sep=";")
     dfTeams = pd.read_csv("2020-2021Team.csv", nrows=50, sep=",")
 
+    
     figPoints = px.bar(
         dfPoints,
         color="Pos",
@@ -142,6 +168,32 @@ def render_page_content(pathname):
             showarrow=False,
             align="left"
     )
+
+    #cities = pd.read_csv("diff.csv")
+
+
+    #figMap = px.scatter_mapbox(cities, 
+    #lat="lat", 
+    #lon="lon",  
+    #color_discrete_sequence=["fuchsia"], 
+    #zoom=3, 
+    #height=300)
+
+
+    #figMap.update_layout(mapbox_style="open-street-map")
+    #figMap.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+
+    figMap2 = px.choropleth(
+        data_frame=dfplayercities,
+        locationmode='ISO-3',
+        locations='Nationality',
+        color='count',
+        hover_data=['Nationality'],
+        color_continuous_scale=px.colors.sequential.YlOrRd,
+        labels={'Nationality'},
+        
+    )
+
 
 
     if pathname == "/":
@@ -214,18 +266,25 @@ def render_page_content(pathname):
                             trendline="lowess",
                             hover_data=["Team"])),
 
-                dcc.Graph(figure=figTeam3)
+                dcc.Graph(figure=figTeam3),
+                html.H1('ONKO VÄÄRIN ^ ?',
+                        style={'textAlign':'center'}),
+
+
+                html.H4('A team’s GF% is their goals-for percentage, representing their share of all goals scored at even-strength. If a team scores three goals and gives up two goals against, they have a goal-for percentage of 60%.But corsica also calculates each team’s expected goals-for percentage, which is the same as above but considers only xG and not actual goals. A team might generate 2.75 xG in a game and surrender 2.25 xG against, giving them an xGF% of 55%.This graph compares actual GF% (reality) and xGF% (expectation) to see how a team is performing relative to what we’d expect.'
+                )
                             
                 # KIRJOTA ETTÄ KUVIA EI VOI LISÄTÄ PISTEIDEN TILALLE
                 
                 ]
     elif pathname == "/page-4":
         return [
-                html.H1('Tyhjä',
+                html.H1('NHL players by nationality',
                         style={'textAlign':'center'}),
-
+                        # https://gist.github.com/roblivian/7623180?short_path=6c39835
+                        # http://rstudio-pubs-static.s3.amazonaws.com/257443_6639015f2f144de7af35ce4615902dfd.html
                 
-                
+                dcc.Graph(figure=figMap2),
                 
                 ]
     # If the user tries to reach a different page, return a 404 message
