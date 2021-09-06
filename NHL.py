@@ -11,17 +11,18 @@ import dash_bootstrap_components as dbc
 
 from dash.dependencies import Input, Output
 
+from app import app
+from layouts import mapLayout
+from callbacks import *
 
 
-
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 
 #dfcities = pd.read_csv("Cities.csv", sep=";", usecols=[2,19])   # Lähteenä https://github.com/drei01/geojson-world-cities
 dfplayercities = pd.read_csv("PlayerCities.csv", sep=",", usecols=[9])
 
 dfplayercities = dfplayercities.groupby(['Nationality']).size().reset_index(name='count')
-print(dfplayercities)
+#print(dfplayercities)
 
 #def dataframe_difference(df1, df2, which):
    # """Find rows which are different between two DataFrames."""
@@ -158,13 +159,13 @@ def render_page_content(pathname):
     )
     figTeam3.add_annotation(
             x=39, y=60,
-            text="Overperforming",
+            text="Underperforming",
             showarrow=False,
             align="left"
     )
     figTeam3.add_annotation(
             x=61, y=40,
-            text="Underperforming",
+            text="Overperforming",
             showarrow=False,
             align="left"
     )
@@ -183,7 +184,7 @@ def render_page_content(pathname):
     #figMap.update_layout(mapbox_style="open-street-map")
     #figMap.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
 
-    figMap2 = px.choropleth(
+    figMap = px.choropleth(
         data_frame=dfplayercities,
         locationmode='ISO-3',
         locations='Nationality',
@@ -191,17 +192,17 @@ def render_page_content(pathname):
         hover_data=['Nationality'],
         color_continuous_scale=px.colors.sequential.YlOrRd,
         labels={'Nationality'},
+        height=800,
         
     )
 
+    
 
+    
 
     if pathname == "/":
-        return [
-                
-                
-                ]
-    
+        return mapLayout
+                        
     elif pathname == "/page-1":
         return [
                 
@@ -221,7 +222,7 @@ def render_page_content(pathname):
                 
                 
                             
-             ]
+            ]
     elif pathname == "/page-2":
         return [
                 html.H1('Top 50 goal scorers',
@@ -236,7 +237,7 @@ def render_page_content(pathname):
                         height=900)),
 
                 dcc.Graph(id='scatterGoals',
-                         figure=px.scatter(
+                        figure=px.scatter(
                             dfGoals,
                             x="GP", 
                             y="G",
@@ -251,7 +252,7 @@ def render_page_content(pathname):
                         style={'textAlign':'center'}),
 
                 dcc.Graph(id='scatterTeam',
-                         figure=px.scatter(
+                        figure=px.scatter(
                             dfTeams,
                             x="Points", 
                             y="SF",
@@ -259,7 +260,7 @@ def render_page_content(pathname):
                             hover_data=["Team"])),
 
                 dcc.Graph(id='scatterTeam2',
-                         figure=px.scatter(
+                        figure=px.scatter(
                             dfTeams,
                             x="Points", 
                             y="SA",
@@ -278,13 +279,16 @@ def render_page_content(pathname):
                 
                 ]
     elif pathname == "/page-4":
+        
         return [
+            
+            
                 html.H1('NHL players by nationality',
                         style={'textAlign':'center'}),
                         # https://gist.github.com/roblivian/7623180?short_path=6c39835
                         # http://rstudio-pubs-static.s3.amazonaws.com/257443_6639015f2f144de7af35ce4615902dfd.html
-                
-                dcc.Graph(figure=figMap2),
+
+                dcc.Graph(figure=figMap),
                 
                 ]
     # If the user tries to reach a different page, return a 404 message
