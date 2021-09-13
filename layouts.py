@@ -7,14 +7,6 @@ import data
 # Import Bootstrap components
 import dash_bootstrap_components as dbc
 
-figPoints = px.bar(
-        data.dfPoints,
-        color="Pos",
-        x="P",
-        y="Name",
-        height=900
-    )
-figPoints.update_layout(yaxis={'categoryorder':'total descending'})
 
 figTeam3 =px.scatter(
         data.dfTeams,
@@ -65,67 +57,52 @@ figTeam3.add_annotation(
         showarrow=False,
         align="left"
 )
-figMap = px.choropleth(
-        data_frame=data.dfplayercities,
-        locationmode='ISO-3',
-        locations='Nationality',
-        color='count',
-        hover_data=['Nationality'],
-        color_continuous_scale=px.colors.sequential.YlOrRd,
-        labels={'Nationality'},
-        height=800,
+# figMap = px.choropleth(
+#         data_frame=data.dfplayercities,
+#         locationmode='ISO-3',
+#         locations='Nationality',
+#         color='count',
+#         hover_data=['Nationality'],
+#         color_continuous_scale=px.colors.sequential.YlOrRd,
+#         labels={'Nationality'},
+#         height=800,
         
-)
+# )
 
 mapLayout = html.Div([
     dcc.Dropdown(id='team',
                     options=[
-                        {"label": "FIN", "value": "FIN"},
-                        {"label": "CAN", "value": "CAN"},
+                        {"label": "COL", "value": "COL"},
+                        {"label": "EDM", "value": "EDM"},
                         {"label": "USA", "value": "USA"},
                         {"label": "SWE", "value": "SWE"}],
                     multi=False,
-                    value="FIN",
+                    value="EDM",
                     style={'width': "40%"}
                     ),
     dcc.Graph(id='map', figure={})
 ])
 
 pointsLayout = html.Div([
-     html.H1('Top 50 players in points',
+        html.H1('Kaikkien aikojen pistepörssin top 50',
                         style={'textAlign':'center'}),
 
-                dcc.Graph(figure=figPoints),
+        dcc.Dropdown(id='pointsDropdown',
+                    options=[
+                        {"label": "P", "value": "P"},
+                        {"label": "G", "value": "G"},
+                        {"label": "A", "value": "A"},
+                        {"label": "PIM", "value": "PIM"},
+                        {"label": "PPG", "value": "PPG"},
+                        {"label": "SHG", "value": "SHG"},
+                        {"label": "SHOTS", "value": "SHOTS"},],
+                    multi=False,
+                    value="G",
+                    style={'width': "40%"}
+                    ),
+                dcc.Graph(id='pointsGraph', figure={}),
+                dcc.Graph(id='pointsScatter', figure={}),
 
-
-                dcc.Graph(id='scatterPoints',
-                        figure=px.scatter(
-                        data.dfPoints,
-                        x="GP", 
-                        y="P",
-                        color="Pos",
-                        hover_data=["Name"],)),
-])
-
-goalsLayout = html.Div([
-     html.H1('Top 50 goal scorers',
-                        style={'textAlign':'center'}),
-
-                dcc.Graph(id='bargraph',
-                        figure=px.bar(
-                        data.dfGoals,
-                        color="Pos",
-                        x="G",
-                        y="Name",
-                        height=900)),
-
-                dcc.Graph(id='scatterGoals',
-                        figure=px.scatter(
-                            data.dfGoals,
-                            x="GP", 
-                            y="G",
-                            color="Pos",
-                            hover_data=["Name"]))
 ])
 
 teamsLayout = html.Div([
@@ -164,5 +141,5 @@ teamMapLayout = html.Div([
                 # https://gist.github.com/roblivian/7623180?short_path=6c39835
                 # http://rstudio-pubs-static.s3.amazonaws.com/257443_6639015f2f144de7af35ce4615902dfd.html
 
-    dcc.Graph(figure=figMap),
+    #dcc.Graph(figure=figMap),
 ])

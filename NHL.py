@@ -12,7 +12,7 @@ import data
 from dash.dependencies import Input, Output
 
 from app import app
-from layouts import mapLayout
+from layouts import mapLayout, pointsLayout
 from callbacks import *
 
 
@@ -42,7 +42,6 @@ navbar = dbc.NavbarSimple(
             children=[
                 dbc.DropdownMenuItem("Pelaajat", header=True),
                 dbc.DropdownMenuItem("Pisteet", href="/pisteet"),
-                dbc.DropdownMenuItem("Maalit", href="/maalit"),
             ],
             nav=True,
             in_navbar=True,
@@ -73,27 +72,7 @@ app.layout = html.Div([
     navbar,
     content
 ])
-# ,mapLayout
-@app.callback(
-    Output(component_id='map', component_property='figure'),
-    Input(component_id='team', component_property='value')
-)
 
-def update_graph(option_slctd):
-    data.dfplayercities = data.dfplayercities[data.dfplayercities['Nationality'] == option_slctd]
-   
-    figMap = px.choropleth(
-    data_frame=data.dfplayercities,
-    locationmode='ISO-3',
-    locations='Nationality',
-    color='count',
-    hover_data=['Nationality'],
-    color_continuous_scale=px.colors.sequential.YlOrRd,
-    labels={'Nationality'},
-    height=800,
-    
-    )
-    return figMap
 
 
     
