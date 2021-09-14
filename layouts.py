@@ -70,14 +70,42 @@ figTeam3.add_annotation(
 # )
 
 mapLayout = html.Div([
+    html.H1('Pelaajien kotimaat joukkuettain',
+                style={'textAlign':'center'}),
     dcc.Dropdown(id='team',
                     options=[
+                        {"label": "ANA", "value": "ANA"},
+                        {"label": "ARI", "value": "ARI"},
+                        {"label": "BOS", "value": "BOS"},
+                        {"label": "BUF", "value": "BUF"},
+                        {"label": "CAR", "value": "CAR"},
+                        {"label": "CGY", "value": "CGY"},
+                        {"label": "CBJ", "value": "CBJ"},
                         {"label": "COL", "value": "COL"},
+                        {"label": "DAL", "value": "DAL"},
+                        {"label": "DET", "value": "DET"},
                         {"label": "EDM", "value": "EDM"},
-                        {"label": "USA", "value": "USA"},
-                        {"label": "SWE", "value": "SWE"}],
+                        {"label": "FLA", "value": "FLA"},
+                        {"label": "L.A", "value": "L.A"},
+                        {"label": "MIN", "value": "MIN"},
+                        {"label": "MTL", "value": "MTL"},
+                        {"label": "NSH", "value": "NSH"},
+                        {"label": "N.J", "value": "N.J"},
+                        {"label": "NYI", "value": "NYI"},
+                        {"label": "NYR", "value": "NYR"},
+                        {"label": "OTT", "value": "OTT"},
+                        {"label": "PHI", "value": "PHI"},
+                        {"label": "PIT", "value": "PIT"},
+                        {"label": "S.J", "value": "S.J"},
+                        {"label": "STL", "value": "STL"},
+                        {"label": "T.B", "value": "T.B"},
+                        {"label": "TOR", "value": "TOR"},
+                        {"label": "VAN", "value": "VAN"},
+                        {"label": "VGK", "value": "VGK"},
+                        {"label": "WPG", "value": "WPG"},
+                        {"label": "WSH", "value": "WSH"},],
                     multi=False,
-                    value="EDM",
+                    value="ANA",
                     style={'width': "40%"}
                     ),
     dcc.Graph(id='map', figure={})
@@ -106,27 +134,27 @@ pointsLayout = html.Div([
 ])
 
 teamsLayout = html.Div([
-     html.H1('TEAM 1',
+                 html.H1('TEAM 1',
                         style={'textAlign':'center'}),
+        
+                dcc.Dropdown(id='teamDropdown',
+                    options=[
+                        {"label": "SF", "value": "SF"},
+                        {"label": "SA", "value": "SA"},
+                        {"label": "GF", "value": "GF"},
+                        {"label": "GA", "value": "GA"},
+                        {"label": "SH%", "value": "SH%"},
+                        {"label": "SV%", "value": "SV%"},],
+                    multi=False,
+                    value="SF",
+                    style={'width': "40%"}
+                    ),
 
-                dcc.Graph(id='scatterTeam',
-                        figure=px.scatter(
-                            data.dfTeams,
-                            x="Points", 
-                            y="SF",
-                            trendline="lowess",
-                            hover_data=["Team"])),
+                dcc.Graph(id='teamScatter', figure={}),
 
-                dcc.Graph(id='scatterTeam2',
-                        figure=px.scatter(
-                            data.dfTeams,
-                            x="Points", 
-                            y="SA",
-                            trendline="lowess",
-                            hover_data=["Team"])),
 
                 dcc.Graph(figure=figTeam3),
-                html.H1('ONKO VÄÄRIN ^ ?',
+                html.H1('ONKO VÄÄRIN ^ ?  KIRJOTA ETTÄ KUVIA EI VOI LISÄTÄ PISTEIDEN TILALLE',
                         style={'textAlign':'center'}),
 
 
@@ -134,12 +162,4 @@ teamsLayout = html.Div([
                 )
                             
                 # KIRJOTA ETTÄ KUVIA EI VOI LISÄTÄ PISTEIDEN TILALLE
-])
-teamMapLayout = html.Div([
-     html.H1('NHL players by nationality',
-                style={'textAlign':'center'}),
-                # https://gist.github.com/roblivian/7623180?short_path=6c39835
-                # http://rstudio-pubs-static.s3.amazonaws.com/257443_6639015f2f144de7af35ce4615902dfd.html
-
-    #dcc.Graph(figure=figMap),
 ])
