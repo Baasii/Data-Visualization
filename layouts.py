@@ -7,16 +7,14 @@ import data
 # Import Bootstrap components
 import dash_bootstrap_components as dbc
 
-
+##### xGF CHART
 figTeam3 =px.scatter(
         data.dfTeams,
         x="GF%", 
         y="xGF%",
         hover_data=["Team"],
         width=800,
-        height=600,
-        
-        
+        height=600,   
     )
 
 figTeam3.add_shape(type="line",
@@ -57,59 +55,56 @@ figTeam3.add_annotation(
         showarrow=False,
         align="left"
 )
-# figMap = px.choropleth(
-#         data_frame=data.dfplayercities,
-#         locationmode='ISO-3',
-#         locations='Nationality',
-#         color='count',
-#         hover_data=['Nationality'],
-#         color_continuous_scale=px.colors.sequential.YlOrRd,
-#         labels={'Nationality'},
-#         height=800,
-        
-# )
 
-mapLayout = html.Div([
-    html.H1('Pelaajien kotimaat joukkuettain',
-                style={'textAlign':'center'}),
-    dcc.Dropdown(id='team',
-                    options=[
-                        {"label": "ANA", "value": "ANA"},
-                        {"label": "ARI", "value": "ARI"},
-                        {"label": "BOS", "value": "BOS"},
-                        {"label": "BUF", "value": "BUF"},
-                        {"label": "CAR", "value": "CAR"},
-                        {"label": "CGY", "value": "CGY"},
-                        {"label": "CBJ", "value": "CBJ"},
-                        {"label": "COL", "value": "COL"},
-                        {"label": "DAL", "value": "DAL"},
-                        {"label": "DET", "value": "DET"},
-                        {"label": "EDM", "value": "EDM"},
-                        {"label": "FLA", "value": "FLA"},
-                        {"label": "L.A", "value": "L.A"},
-                        {"label": "MIN", "value": "MIN"},
-                        {"label": "MTL", "value": "MTL"},
-                        {"label": "NSH", "value": "NSH"},
-                        {"label": "N.J", "value": "N.J"},
-                        {"label": "NYI", "value": "NYI"},
-                        {"label": "NYR", "value": "NYR"},
-                        {"label": "OTT", "value": "OTT"},
-                        {"label": "PHI", "value": "PHI"},
-                        {"label": "PIT", "value": "PIT"},
-                        {"label": "S.J", "value": "S.J"},
-                        {"label": "STL", "value": "STL"},
-                        {"label": "T.B", "value": "T.B"},
-                        {"label": "TOR", "value": "TOR"},
-                        {"label": "VAN", "value": "VAN"},
-                        {"label": "VGK", "value": "VGK"},
-                        {"label": "WPG", "value": "WPG"},
-                        {"label": "WSH", "value": "WSH"},],
-                    multi=False,
-                    value="ANA",
-                    style={'width': "40%"}
-                    ),
-    dcc.Graph(id='map', figure={})
+
+teamLayout = html.Div([
+    html.Div([
+        html.H1('Pelaajien kotimaat joukkuettain',
+                    style={'textAlign':'center'}),
+        dcc.Dropdown(id='team',
+                        options=[
+                            {"label": "ANA", "value": "ANA"},
+                            {"label": "ARI", "value": "ARI"},
+                            {"label": "BOS", "value": "BOS"},
+                            {"label": "BUF", "value": "BUF"},
+                            {"label": "CAR", "value": "CAR"},
+                            {"label": "CGY", "value": "CGY"},
+                            {"label": "CBJ", "value": "CBJ"},
+                            {"label": "COL", "value": "COL"},
+                            {"label": "DAL", "value": "DAL"},
+                            {"label": "DET", "value": "DET"},
+                            {"label": "EDM", "value": "EDM"},
+                            {"label": "FLA", "value": "FLA"},
+                            {"label": "L.A", "value": "L.A"},
+                            {"label": "MIN", "value": "MIN"},
+                            {"label": "MTL", "value": "MTL"},
+                            {"label": "NSH", "value": "NSH"},
+                            {"label": "N.J", "value": "N.J"},
+                            {"label": "NYI", "value": "NYI"},
+                            {"label": "NYR", "value": "NYR"},
+                            {"label": "OTT", "value": "OTT"},
+                            {"label": "PHI", "value": "PHI"},
+                            {"label": "PIT", "value": "PIT"},
+                            {"label": "S.J", "value": "S.J"},
+                            {"label": "STL", "value": "STL"},
+                            {"label": "T.B", "value": "T.B"},
+                            {"label": "TOR", "value": "TOR"},
+                            {"label": "VAN", "value": "VAN"},
+                            {"label": "VGK", "value": "VGK"},
+                            {"label": "WPG", "value": "WPG"},
+                            {"label": "WSH", "value": "WSH"},],
+                        multi=False,
+                        value="ANA",
+                        style={'width': "40%"}
+                        ),
+        dcc.Graph(id='map', figure={}),
+        
+    ]),
+    html.Div([
+        dcc.Graph(id='pie', figure={})
+    ])
 ])
+
 
 pointsLayout = html.Div([
         html.H1('Kaikkien aikojen pistepörssin top 50',

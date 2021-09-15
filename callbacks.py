@@ -3,13 +3,13 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-from layouts import mapLayout, pointsLayout, teamsLayout
+from layouts import teamLayout, pointsLayout, teamsLayout
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import data
 
-from dash.dependencies import Input, Output, State, MATCH, ALL
+from dash.dependencies import Input, Output
 
 from app import app
 
@@ -36,7 +36,7 @@ def render_page_content(pathname):
 
     elif pathname == "/joukkue2":
         
-        return mapLayout
+        return teamLayout
 
     # 404
     return dbc.Jumbotron(
@@ -91,7 +91,6 @@ def update_graph(option_slctd):
         trendline="lowess",
         hover_data=["Team"]
         )
-    figScatterPoints.update_layout(yaxis={'categoryorder':'total ascending'})
     return figScatterPoints
 
 ##########   Nationalities map   ################
@@ -110,11 +109,29 @@ def update_graph(option_slctd):
     locationmode='ISO-3',
     locations='Nationality',
     color='count',
-    #hover_data=['Nationality'],
-    #color_continuous_scale=px.colors.sequential.YlOrRd,
-    #labels={'Nationality'},
     height=800,
     
     )
     return figMap
+
+##########   Nationalities piechart   ################
+
+@app.callback(
+    Output(component_id='pie', component_property='figure'),
+    Input(component_id='team', component_property='value')
+)
+
+
+def update_graph(option_slctd):
+
+    dfteamMap = data.dfteamMap[data.dfteamMap['Team'] == option_slctd]
+   
+    figPie = px.pie(
+    data_frame=dfteamMap,
+    values='count',
+    names='Nationality',
+    
+    )
+    figPie.update_traces(textposition='inside', textinfo='percent+label')
+    return figPie
 
