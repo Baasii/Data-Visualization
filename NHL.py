@@ -1,20 +1,13 @@
-import pandas as pd
-import plotly.express as px  
-import plotly.graph_objects as go
 
-
-import dash  
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-import data
 
-from dash.dependencies import Input, Output
+
+
 
 from app import app
 from callbacks import *
-
-
 
 
 SIDEBAR_STYLE = {
@@ -26,8 +19,6 @@ SIDEBAR_STYLE = {
     "padding": "2rem 1rem",
     "background-color": "#f8f9fa",
 }
-
-
 CONTENT_STYLE = {
     "marginLeft": "10%",
     "marginRight": "10%",

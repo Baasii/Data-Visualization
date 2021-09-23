@@ -1,10 +1,6 @@
-import pandas as pd
 import plotly.express as px  
-import plotly.graph_objects as go
-
 
 from layouts import teamLayout, pointsLayout, teamsLayout
-import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import data
@@ -80,20 +76,22 @@ def update_graph(option_slctd):
 ##########   Team scatter plots   ################
 @app.callback(
     Output(component_id='teamScatter', component_property='figure'),
-    Input(component_id='teamDropdown', component_property='value')
+    Input(component_id='teamDropdownX', component_property='value'),
+    Input(component_id='teamDropdownY', component_property='value')
 )
-def update_graph(option_slctd):
+def update_graph(option_slctd, option_slctd2):
    
-    figScatterPoints = px.scatter(
+    figScatterPoints = px.scatter_3d(
         data.dfTeams,
         x="Points", 
         y=option_slctd,
-        trendline="lowess",
+        z=option_slctd2,
+        height=700,
         hover_data=["Team"]
         )
     return figScatterPoints
 
-##########   Nationalities map   ################
+##########   Nationalities  choroplethmap   ################
 @app.callback(
     Output(component_id='map', component_property='figure'),
     Input(component_id='team', component_property='value')

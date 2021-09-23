@@ -1,14 +1,12 @@
 # Dash components, html, and dash tables
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_table
 import plotly.express as px  
 import data
-# Import Bootstrap components
-import dash_bootstrap_components as dbc
+
 
 ##### xGF CHART
-figTeam3 =px.scatter(
+figTeamXGF =px.scatter(
         data.dfTeams,
         x="GF%", 
         y="xGF%",
@@ -16,44 +14,39 @@ figTeam3 =px.scatter(
         width=800,
         height=600,   
     )
-
-figTeam3.add_shape(type="line",
+figTeamXGF.add_shape(type="line",
 x0=50, y0=38, x1=50, y1=62,
     line=dict(
         color="LightSeaGreen",
         width=1,
     )
 )
-figTeam3.add_shape(type="line",
+figTeamXGF.add_shape(type="line",
 x0=38, y0=50, x1=62, y1=50,
     line=dict(
         color="LightSeaGreen",
         width=1,
     )
 )
-figTeam3.add_annotation(
+figTeamXGF.add_annotation(
         x=39, y=40,
-        text="Bad",
+        text="Huono",
         showarrow=False,
-        align="left"
 )
-figTeam3.add_annotation(
+figTeamXGF.add_annotation(
         x=61, y=60,
-        text="Good",
+        text="Hyvä",
         showarrow=False,
-        align="left"
 )
-figTeam3.add_annotation(
+figTeamXGF.add_annotation(
         x=39, y=60,
-        text="Underperforming",
+        text="Alisuorittaja",
         showarrow=False,
-        align="left"
 )
-figTeam3.add_annotation(
+figTeamXGF.add_annotation(
         x=61, y=40,
-        text="Overperforming",
+        text="Ylisuorittaja",
         showarrow=False,
-        align="left"
 )
 
 
@@ -131,8 +124,8 @@ pointsLayout = html.Div([
 teamsLayout = html.Div([
                  html.H1('TEAM 1',
                         style={'textAlign':'center'}),
-        
-                dcc.Dropdown(id='teamDropdown',
+                html.H5('X:'),
+                dcc.Dropdown(id='teamDropdownX',
                     options=[
                         {"label": "SF", "value": "SF"},
                         {"label": "SA", "value": "SA"},
@@ -144,11 +137,22 @@ teamsLayout = html.Div([
                     value="SF",
                     style={'width': "40%"}
                     ),
-
+                html.H5('Y:'),
+                dcc.Dropdown(id='teamDropdownY',
+                    options=[
+                        {"label": "SF", "value": "SF"},
+                        {"label": "SA", "value": "SA"},
+                        {"label": "GF", "value": "GF"},
+                        {"label": "GA", "value": "GA"},
+                        {"label": "SH%", "value": "SH%"},
+                        {"label": "SV%", "value": "SV%"},],
+                    multi=False,
+                    value="SA",
+                    style={'width': "40%"}
+                    ),
                 dcc.Graph(id='teamScatter', figure={}),
 
-
-                dcc.Graph(figure=figTeam3),
+                dcc.Graph(figure=figTeamXGF),
                 html.H1('ONKO VÄÄRIN ^ ?  KIRJOTA ETTÄ KUVIA EI VOI LISÄTÄ PISTEIDEN TILALLE',
                         style={'textAlign':'center'}),
 
