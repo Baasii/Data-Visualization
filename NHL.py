@@ -2,7 +2,8 @@
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-
+import dash_table
+import pandas as pd
 
 
 
@@ -57,10 +58,20 @@ navbar = dbc.NavbarSimple(
 
 content = html.Div(id="page-content", children=[], style=CONTENT_STYLE)
 
+
+df = data.dfAllPlayers
+
+
 app.layout = html.Div([
     dcc.Location(id="url"),
     navbar,
-    content
+    content,
+    dash_table.DataTable(
+        id='table',
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict('records'),
+    
+    ),
 ])
 
 

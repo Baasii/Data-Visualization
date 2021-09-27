@@ -1,9 +1,10 @@
 # Dash components, html, and dash tables
 import dash_core_components as dcc
 import dash_html_components as html
+
 import plotly.express as px  
 import data
-
+from PIL import Image
 
 ##### xGF CHART
 figTeamXGF =px.scatter(
@@ -48,6 +49,26 @@ figTeamXGF.add_annotation(
         text="Ylisuorittaja",
         showarrow=False,
 )
+figTeamXGF.update_traces(marker_color="rgba(0,0,0,0)")
+
+for i, row in data.dfTeams.iterrows():
+    team = row['Team'].replace(" ", "-")
+    figTeamXGF.add_layout_image(
+        dict(
+            source=Image.open(f"images/{team}.png"),
+            xref="x",
+            yref="y",
+            xanchor="center",
+            yanchor="middle",
+            x=row["GF%"],
+            y=row["xGF%"],
+            sizex=2,
+            sizey=2,
+            sizing="contain",
+            opacity=1,
+            layer="above"
+        )
+    )
 
 
 teamLayout = html.Div([
@@ -118,6 +139,7 @@ pointsLayout = html.Div([
                     ),
                 dcc.Graph(id='pointsGraph', figure={}),
                 dcc.Graph(id='pointsScatter', figure={}),
+                
 
 ])
 

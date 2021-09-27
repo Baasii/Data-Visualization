@@ -1,5 +1,7 @@
 import pandas as pd
 
+dfAllPlayers = pd.read_csv("2020-2021Players.csv", sep=",")
+
 dfPlayers = pd.read_csv("Players.csv", sep=",", usecols=[2,9])
 dfteamMap = dfPlayers.groupby(['Team', 'Nationality' ]).size().reset_index(name='count')
 
