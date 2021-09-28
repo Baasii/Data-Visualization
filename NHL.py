@@ -59,19 +59,13 @@ navbar = dbc.NavbarSimple(
 content = html.Div(id="page-content", children=[], style=CONTENT_STYLE)
 
 
-df = data.dfAllPlayers
+#df = data.dfAllPlayers
 
 
 app.layout = html.Div([
     dcc.Location(id="url"),
     navbar,
     content,
-    dash_table.DataTable(
-        id='table',
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict('records'),
-    
-    ),
 ])
 
 

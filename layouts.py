@@ -6,72 +6,8 @@ import plotly.express as px
 import data
 from PIL import Image
 
-##### xGF CHART
-figTeamXGF =px.scatter(
-        data.dfTeams,
-        x="GF%", 
-        y="xGF%",
-        hover_data=["Team"],
-        width=800,
-        height=600,   
-    )
-figTeamXGF.add_shape(type="line",
-x0=50, y0=38, x1=50, y1=62,
-    line=dict(
-        color="LightSeaGreen",
-        width=1,
-    )
-)
-figTeamXGF.add_shape(type="line",
-x0=38, y0=50, x1=62, y1=50,
-    line=dict(
-        color="LightSeaGreen",
-        width=1,
-    )
-)
-figTeamXGF.add_annotation(
-        x=39, y=40,
-        text="Huono",
-        showarrow=False,
-)
-figTeamXGF.add_annotation(
-        x=61, y=60,
-        text="Hyvä",
-        showarrow=False,
-)
-figTeamXGF.add_annotation(
-        x=39, y=60,
-        text="Alisuorittaja",
-        showarrow=False,
-)
-figTeamXGF.add_annotation(
-        x=61, y=40,
-        text="Ylisuorittaja",
-        showarrow=False,
-)
-figTeamXGF.update_traces(marker_color="rgba(0,0,0,0)")
 
-for i, row in data.dfTeams.iterrows():
-    team = row['Team'].replace(" ", "-")
-    figTeamXGF.add_layout_image(
-        dict(
-            source=Image.open(f"images/{team}.png"),
-            xref="x",
-            yref="y",
-            xanchor="center",
-            yanchor="middle",
-            x=row["GF%"],
-            y=row["xGF%"],
-            sizex=2,
-            sizey=2,
-            sizing="contain",
-            opacity=1,
-            layer="above"
-        )
-    )
-
-
-teamLayout = html.Div([
+teamCountryLayout = html.Div([
     html.Div([
         html.H1('Pelaajien kotimaat joukkuettain',
                     style={'textAlign':'center'}),
@@ -174,13 +110,29 @@ teamsLayout = html.Div([
                     ),
                 dcc.Graph(id='teamScatter', figure={}),
 
-                dcc.Graph(figure=figTeamXGF),
-                html.H1('ONKO VÄÄRIN ^ ?  KIRJOTA ETTÄ KUVIA EI VOI LISÄTÄ PISTEIDEN TILALLE',
-                        style={'textAlign':'center'}),
-
+                   
+                dcc.Graph(id='teamGFScatter', figure={}),
+                html.H5('Kausi:',
+                    style={'textAlign':'center'}),
+                dcc.Slider(
+                    id='slider',
+                    step=None,
+                    min=2016,
+                    max=2020,
+                    marks={
+                        
+                        2016: '2016-2017',
+                        2017: '2017-2018',
+                        2018: '2018-2019',
+                        2019: '2019-2020',
+                        2020: '2020-2021'
+                    },
+                    value=2020,
+                ), 
+            
 
                 html.H4('A team’s GF% is their goals-for percentage, representing their share of all goals scored at even-strength. If a team scores three goals and gives up two goals against, they have a goal-for percentage of 60%.But corsica also calculates each team’s expected goals-for percentage, which is the same as above but considers only xG and not actual goals. A team might generate 2.75 xG in a game and surrender 2.25 xG against, giving them an xGF% of 55%.This graph compares actual GF% (reality) and xGF% (expectation) to see how a team is performing relative to what we’d expect.'
                 )
                             
-                # KIRJOTA ETTÄ KUVIA EI VOI LISÄTÄ PISTEIDEN TILALLE
+                
 ])
